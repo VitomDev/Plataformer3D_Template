@@ -20,7 +20,12 @@ public class PlayerController : MonoBehaviour
     private CharacterController characterController;
 
     private float verticalVelocity = 0f;
+    [Header("Data")]
     [SerializeField] private float gravity = -9.8f; // m/s2
+
+    private Animator animator;
+    
+
     private void OnEnable()
     {
         movement.Enable();
@@ -37,7 +42,8 @@ public class PlayerController : MonoBehaviour
     {
         mainCamera = Camera.main;
         characterController = GetComponent<CharacterController>();
-        
+        animator = GetComponentInChildren<Animator>();
+
     }
 
     void Start()
@@ -46,9 +52,15 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
+        Vector2 movementValue;
+        Vector3 movementValueXZ;
+        bool isWalking;
+        
         UpdateVerticalMovement();
-        UpdateMovement(out var movementValue, out var movementValueXZ);
+        UpdateMovement(out movementValue, out movementValueXZ, out isWalking);
         UpdateOrientation(movementValue, movementValueXZ);
+
+        animator.SetBool("IsWalking", isWalking);
     }
     
     private void UpdateVerticalMovement()
@@ -69,7 +81,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    private void UpdateMovement(out Vector2 movementValue, out Vector3 movementValueXZ)
+    private void UpdateMovement(out Vector2 movementValue, out Vector3 movementValueXZ, out bool isWalking)
     {
         //Detectar input
         movementValue = movement.ReadValue<Vector2>();
@@ -87,6 +99,8 @@ public class PlayerController : MonoBehaviour
         
         //Mover jugador con Input System
         characterController.Move(velocity * Time.deltaTime);
+
+        isWalking = movementValueXZ.magnitude > 0f;
     }
     
     private void UpdateOrientation(Vector2 movementValue, Vector3 movementValueXZ)
