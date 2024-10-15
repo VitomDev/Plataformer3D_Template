@@ -7,8 +7,3 @@ The character controller includes:
 - Gravity
 - Jump
 (Works with keyboard and controller)
-
-The project also includes:
-- Enemies with basic pathfinding and tracking AI
-- Killing enemies
-- Game results
