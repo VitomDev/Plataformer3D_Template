@@ -61,6 +61,8 @@ public class PlayerController : MonoBehaviour
         UpdateOrientation(movementValue, movementValueXZ);
 
         animator.SetBool("IsWalking", isWalking);
+        animator.SetBool("IsGrounded", characterController.isGrounded);
+        animator.SetFloat("NormalizedVerticalVelocity", Mathf.Clamp01(Mathf.InverseLerp(jumpSpeed, -jumpSpeed, verticalVelocity)));
     }
     
     private void UpdateVerticalMovement()
